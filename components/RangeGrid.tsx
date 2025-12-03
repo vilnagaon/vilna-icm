@@ -73,7 +73,7 @@ export const RangeGrid: React.FC<RangeGridProps> = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-4 animate-fade-in">
+    <div className="w-full max-w-md mx-auto space-y-3 animate-fade-in">
       
       {/* Controls Container */}
       <div className="bg-slate-800 p-3 rounded-lg border border-slate-700 shadow-md">
@@ -128,8 +128,7 @@ export const RangeGrid: React.FC<RangeGridProps> = () => {
             {viewMode === 'HEATMAP' ? (
               <>
                 <span className="flex items-center"><span className="w-2 h-2 bg-emerald-400 rounded-full mr-1"></span>Easy</span>
-                <span className="flex items-center"><span className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>Okay</span>
-                <span className="flex items-center"><span className="w-2 h-2 bg-orange-500 rounded-full mr-1"></span>Thin</span>
+                <span className="flex items-center"><span className="w-2 h-2 bg-yellow-500 rounded-full mr-1"></span>Marginal</span>
               </>
             ) : (
                 <span className="flex items-center"><span className="w-2 h-2 bg-emerald-500 rounded-full mr-1"></span>Push</span>
@@ -140,11 +139,13 @@ export const RangeGrid: React.FC<RangeGridProps> = () => {
 
       {/* The Grid */}
       <div className="relative bg-slate-900 p-0.5 rounded-md border border-slate-700 shadow-xl overflow-hidden">
-        <div className="grid grid-cols-13 gap-px bg-slate-800">
+        <div 
+          className="grid gap-px bg-slate-800"
+          style={{ gridTemplateColumns: 'repeat(13, minmax(0, 1fr))' }}
+        >
           {MATRIX_ORDER.map((rowRank) => 
             MATRIX_ORDER.map((colRank) => {
               const hand = getHandType(rowRank, colRank);
-              const action = getHandAction(hand, stackDepth);
               
               return (
                 <div
@@ -166,13 +167,13 @@ export const RangeGrid: React.FC<RangeGridProps> = () => {
 
         {/* Floating Tooltip */}
         {hoveredHand && (
-          <div className="absolute inset-x-0 bottom-0 p-2 bg-slate-900/95 backdrop-blur border-t border-slate-700 text-center animate-fade-in z-20">
+          <div className="absolute inset-x-0 bottom-0 p-2 bg-slate-900/95 backdrop-blur border-t border-slate-700 text-center animate-fade-in z-20 shadow-lg">
              <div className="flex flex-wrap items-center justify-center gap-x-3 text-xs">
                 <span className="text-lg font-bold text-white">{hoveredHand}</span>
                 
                 {getHandAction(hoveredHand, stackDepth) === 'RAISE' ? (
                    <>
-                     <span className="font-bold uppercase px-1.5 py-0.5 rounded text-[10px] bg-cyan-900 text-cyan-300">
+                     <span className="font-bold uppercase px-1.5 py-0.5 rounded text-[10px] bg-cyan-900 text-cyan-300 border border-cyan-800">
                         RAISE
                      </span>
                      <span className="text-slate-400">
@@ -185,7 +186,7 @@ export const RangeGrid: React.FC<RangeGridProps> = () => {
                       Max Shove: <span className="text-white font-mono">{getHandData(hoveredHand) >= 100 ? '100+' : getHandData(hoveredHand)} BB</span>
                     </span>
                     
-                    <span className={`font-bold uppercase px-1.5 py-0.5 rounded text-[10px] ${getHandData(hoveredHand) >= stackDepth ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'}`}>
+                    <span className={`font-bold uppercase px-1.5 py-0.5 rounded text-[10px] ${getHandData(hoveredHand) >= stackDepth ? 'bg-green-900 text-green-300 border border-green-800' : 'bg-red-900 text-red-300 border border-red-800'}`}>
                       {getHandData(hoveredHand) >= stackDepth ? 'PUSH' : 'FOLD'}
                     </span>
                     

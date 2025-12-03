@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, LayoutGrid, Settings, Play, CheckCircle, XCircle, BrainCircuit } from 'lucide-react';
+import { Activity, LayoutGrid, Settings, Play, CheckCircle, XCircle, BrainCircuit, Spade } from 'lucide-react';
 import { Player, Scenario, ViewMode, UserStats } from './types';
 import { INITIAL_STATS } from './constants';
 import { generateScenario, isPushCorrect, getHandString } from './utils/poker';
@@ -180,8 +180,8 @@ const App: React.FC = () => {
       <header className="p-4 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-white">
-              V
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30 ring-1 ring-white/10">
+              <Spade size={18} className="text-white fill-current" />
             </div>
             <h1 className="text-lg font-bold tracking-tight text-white hidden sm:block">Vilna Gaon's ICM Trainer</h1>
             <h1 className="text-lg font-bold tracking-tight text-white sm:hidden">Vilna's ICM</h1>
