@@ -1,0 +1,5 @@
+{
+  "name": "Vilna Gaon's ICM Trainer",
+  "description": "A customized Poker ICM trainer focusing on high-pressure bubble spots, hypers, and specific payout structures. Features an AI Coach powered by Gemini.",
+  "requestFramePermissions": []
+}
