@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, LayoutGrid, Settings, Play, CheckCircle, XCircle, BrainCircuit, Spade } from 'lucide-react';
+import { Activity, LayoutGrid, Settings, Play, CheckCircle, XCircle, BrainCircuit } from 'lucide-react';
 import { Player, Scenario, ViewMode, UserStats } from './types';
 import { INITIAL_STATS } from './constants';
 import { generateScenario, isPushCorrect, getHandString } from './utils/poker';
@@ -7,6 +7,30 @@ import { PokerTable } from './components/PokerTable';
 import { RangeGrid } from './components/RangeGrid';
 import { Dashboard } from './components/Dashboard';
 import { analyzeScenario } from './services/geminiService';
+
+const VilnaLogo = ({ className }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 100 100" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="6" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    {/* Left Leg */}
+    <path d="M 30 75 L 55 10" />
+    {/* Right Leg */}
+    <path d="M 52 10 L 80 85" />
+    {/* Crossbar - slightly curved/angled based on sketch */}
+    <path d="M 25 38 Q 50 32 82 58" />
+    {/* Teeth/Fangs */}
+    <path d="M 45 40 L 44 58" strokeWidth="7" />
+    <path d="M 60 46 L 58 62" strokeWidth="7" />
+    {/* Dot */}
+    <circle cx="56" cy="28" r="6" fill="currentColor" stroke="none" />
+  </svg>
+);
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewMode>('DASHBOARD');
@@ -179,16 +203,16 @@ const App: React.FC = () => {
       {/* Header */}
       <header className="p-4 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/30 ring-1 ring-white/10">
-              <Spade size={18} className="text-white fill-current" />
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/10 ring-1 ring-white/10 overflow-hidden">
+              <VilnaLogo className="text-blue-400 w-8 h-8" />
             </div>
             <h1 className="text-lg font-bold tracking-tight text-white hidden sm:block">Vilna Gaon's ICM Trainer</h1>
             <h1 className="text-lg font-bold tracking-tight text-white sm:hidden">Vilna's ICM</h1>
           </div>
           <div className="flex items-center space-x-4">
             <div className="hidden sm:flex text-xs font-mono text-slate-400 bg-slate-800 px-2 py-1 rounded">
-              v1.0.2 MVP
+              v1.0.3 MVP
             </div>
           </div>
         </div>
@@ -208,7 +232,7 @@ const App: React.FC = () => {
             </div>
             <RangeGrid />
             <div className="text-center text-xs text-slate-500 mt-4">
-              * Green = Push, Grey = Fold. Based on Monker/HRC approximations.
+              * Green = Push, Grey = Fold, Cyan = Raise. Based on Monker/HRC approximations.
             </div>
           </div>
         )}
