@@ -1,5 +1,6 @@
 import React from 'react';
 import { Player, Card, Suit } from '../types';
+import { VilnaLogo } from './VilnaLogo';
 
 interface PokerTableProps {
   players: Player[];
@@ -37,34 +38,49 @@ const CardView: React.FC<{ card: Card }> = ({ card }) => (
 );
 
 export const PokerTable: React.FC<PokerTableProps> = ({ players, heroHand }) => {
-  // Simple radial positioning
-  const radius = 130;
-  const centerX = 160;
-  const centerY = 120;
+  // Elliptical positioning for 2:1 aspect ratio
+  // Container is w-[98%] max-w-5xl. Let's approximate dimensions for calculation.
+  // We use percentage-based positioning for responsiveness or fixed mostly.
+  // Let's stick to the previous logic but adjust radius X and Y separately.
+  
+  const radiusX = 280; // Wider
+  const radiusY = 130; // Shorter
+  const centerX = 320; // Approx center of 640px wide internal coordinate system? 
+  // Actually, let's just use CSS percentage positioning to be safer, 
+  // but keeping the current absolute px logic requires guessing the container size.
+  // The container is responsive. Let's assume a coordinate system of roughly 600x300.
   
   // Find hero index to rotate table so Hero is always bottom center
   const heroIndex = players.findIndex(p => p.isHero);
   const rotateOffset = heroIndex !== -1 ? heroIndex : 0;
   
   const getPosition = (index: number, total: number) => {
-    // Adjust index so Hero is at position (total - 1) or 0 visually at bottom
-    // Visual index 0 is bottom center.
-    // The player array order is usually positional (UTG...BB). 
-    // We want Hero to be at the bottom.
+    // Distribute evenly
+    const angleDeg = ((index - rotateOffset + total) % total) * (360 / total) + 90; // +90 to start bottom
+    const rad = (angleDeg * Math.PI) / 180;
     
-    // Let's just distribute evenly for now.
-    const angle = ((index - rotateOffset + total) % total) * (360 / total) + 90; // +90 to start bottom
-    const rad = (angle * Math.PI) / 180;
-    const x = centerX + radius * Math.cos(rad);
-    const y = centerY + radius * Math.sin(rad);
-    return { x, y };
+    // Ellipse parametric equation
+    // x = a cos t
+    // y = b sin t
+    // We want the visualization to look like a poker table.
+    
+    // Center of the container (assuming relative coordinates for styling)
+    // We will use % in the style output to be responsive.
+    const xPct = 50 + 40 * Math.cos(rad); // 40% radius width
+    const yPct = 50 + 40 * Math.sin(rad); // 40% radius height
+    
+    return { x: xPct, y: yPct };
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto aspect-[4/3] bg-emerald-900 rounded-full border-8 border-emerald-950 shadow-2xl flex items-center justify-center overflow-hidden mb-6">
+    <div className="relative w-[98%] max-w-5xl mx-auto aspect-[2/1] bg-emerald-900 rounded-[10rem] border-8 border-emerald-950 shadow-2xl flex items-center justify-center mb-6">
       {/* Table Felt Branding */}
-      <div className="absolute text-emerald-800 font-bold opacity-30 text-2xl tracking-widest select-none pointer-events-none">
-        VILNA GAON
+      <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 pointer-events-none select-none z-0">
+         <VilnaLogo className="w-24 h-24 text-white mb-1" />
+         <div className="text-white font-black text-[10px] tracking-[0.3em] text-center leading-relaxed">
+            VILNA GAON<br/>
+            PRIVATE EQUITY
+         </div>
       </div>
 
       {/* Players */}
@@ -77,13 +93,13 @@ export const PokerTable: React.FC<PokerTableProps> = ({ players, heroHand }) => 
             key={player.id}
             className={`absolute flex flex-col items-center transition-all duration-500`}
             style={{ 
-              left: `${x}px`, 
-              top: `${y}px`,
+              left: `${x}%`, 
+              top: `${y}%`,
               transform: 'translate(-50%, -50%)'
             }}
           >
             {/* Avatar Circle */}
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 z-10 
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 z-10 shadow-lg
               ${isHero ? 'bg-yellow-600 border-yellow-400' : 'bg-gray-700 border-gray-600'}`}>
               <span className="text-xs font-bold text-white">
                 {player.position}
@@ -91,13 +107,13 @@ export const PokerTable: React.FC<PokerTableProps> = ({ players, heroHand }) => 
             </div>
             
             {/* Stack Info */}
-            <div className="mt-1 bg-black/60 px-2 py-0.5 rounded text-xs text-white font-mono border border-gray-700">
+            <div className="mt-1 bg-black/60 px-2 py-0.5 rounded text-xs text-white font-mono border border-gray-700 whitespace-nowrap z-20">
               {(player.stack / 1000).toFixed(1)}BB
             </div>
 
-            {/* Hero Cards */}
+            {/* Hero Cards - Bottom Right of Avatar */}
             {isHero && (
-              <div className="absolute -top-16 flex space-x-1 scale-90">
+              <div className="absolute left-12 top-10 flex space-x-1 scale-90 origin-top-left z-30 drop-shadow-2xl">
                 <CardView card={heroHand.card1} />
                 <CardView card={heroHand.card2} />
               </div>
@@ -107,7 +123,7 @@ export const PokerTable: React.FC<PokerTableProps> = ({ players, heroHand }) => 
       })}
 
       {/* Pot Info */}
-      <div className="absolute bg-black/40 px-3 py-1 rounded-full text-white text-sm font-semibold border border-emerald-700 backdrop-blur-sm">
+      <div className="absolute bg-black/40 px-3 py-1 rounded-full text-white text-sm font-semibold border border-emerald-700 backdrop-blur-sm shadow-sm">
         Pot: 4.5 BB
       </div>
     </div>
