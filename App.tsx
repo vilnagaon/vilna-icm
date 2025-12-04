@@ -105,6 +105,15 @@ const App: React.FC = () => {
           <Settings size={24} />
           <span className="text-xs mt-1">Setup</span>
         </button>
+        <a 
+          href="https://vilnagaon.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex flex-col items-center text-slate-500 hover:text-blue-400 transition-colors"
+        >
+          <VilnaLogo className="w-6 h-6" />
+          <span className="text-xs mt-1">Vilna</span>
+        </a>
       </div>
     </nav>
   );
