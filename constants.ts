@@ -20,15 +20,30 @@ export const MOCK_PAYOUTS = [
   { name: 'Hyper Satellite (3 tickets)', places: [0.33, 0.33, 0.33] },
 ];
 
+// Helper to get last 5 days for dynamic chart data
+const getRecentDates = () => {
+  const dates = [];
+  const today = new Date();
+  for (let i = 4; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    dates.push(d.toISOString().split('T')[0]); // YYYY-MM-DD
+  }
+  return dates;
+};
+
+const recentDates = getRecentDates();
+
 export const INITIAL_STATS = {
   handsPlayed: 142,
   correct: 112,
   streak: 4,
   history: [
-    { date: '2023-10-20', accuracy: 65 },
-    { date: '2023-10-21', accuracy: 72 },
-    { date: '2023-10-22', accuracy: 78 },
-    { date: '2023-10-23', accuracy: 81 },
+    { date: recentDates[0], accuracy: 65 },
+    { date: recentDates[1], accuracy: 68 },
+    { date: recentDates[2], accuracy: 72 },
+    { date: recentDates[3], accuracy: 78 },
+    { date: recentDates[4], accuracy: 81 },
   ]
 };
 
